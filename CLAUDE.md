@@ -2,7 +2,7 @@
 
 ## What this project is
 
-A premium event ticketing website for a fake business called **KOVA Events**. Built primarily for **content creation** — Instagram posts, stories, and a 60-second screen-record demo. Visual quality and screenshot-readiness come first.
+A colourful event ticketing website for a fake business called **KOVA Events**. Built primarily for **content creation** — Instagram posts, stories, and a 60-second screen-record demo. Visual quality and screenshot-readiness come first.
 
 Customers browse events, purchase tickets via Stripe embedded checkout, and receive email confirmations. The business owner gets an automated notification email on every sale. An admin CMS lets the owner create and manage events.
 
@@ -13,12 +13,13 @@ Customers browse events, purchase tickets via Stripe embedded checkout, and rece
 | Layer | Technology |
 |-------|-----------|
 | Frontend | Vanilla HTML + Tailwind CDN (no build step) |
-| Fonts | Cormorant Garamond (serif display) + Inter (body) |
+| Fonts | Poppins (display/headings, bold) + Inter (body) |
+| Images | Unsplash (hero background + event card photos, direct URL embed) |
 | Backend | Netlify Functions (Node.js, CommonJS) |
 | Database | Supabase (Postgres + Auth + RLS) |
 | Payments | Stripe embedded checkout (`ui_mode: 'embedded'`) in **test mode** |
 | Email | Resend (customer confirmation + admin notification) |
-| Hosting | Netlify (drag-and-drop or GitHub auto-deploy) |
+| Hosting | Netlify (GitHub auto-deploy) |
 
 **No build step.** No framework. No bundler. Every HTML file is self-contained with inline `<style>` blocks.
 
@@ -28,22 +29,46 @@ Customers browse events, purchase tickets via Stripe embedded checkout, and rece
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--bg` | `#FDFAF6` | Page background (warm cream) |
+| `--bg` | `#F7F6FF` | Page background (light lavender) |
 | `--surface` | `#FFFFFF` | Cards, panels |
-| `--surface-2` | `#F7F2EA` | Card headers, input backgrounds |
-| `--border` | `#E6DFD5` | All borders |
-| `--accent` | `#9A7B30` | Gold text (readable on light) |
-| `--accent-bg` | `#C8A96E` | Gold backgrounds, buttons |
-| `--text` | `#1A1612` | Primary text (warm near-black) |
-| `--text-2` | `#6B6156` | Secondary text |
-| `--text-muted` | `#A8A098` | Labels, placeholders |
+| `--surface-2` | `#F0EDFF` | Card headers, input backgrounds |
+| `--border` | `#E0DAFF` | All borders |
+| `--border-light` | `#ECEAFF` | Subtle dividers |
+| `--primary` | `#7C3AED` | Purple — buttons, prices, accents |
+| `--primary-hover` | `#6D28D9` | Button hover state |
+| `--primary-light` | `#A78BFA` | Light purple for gradients/logo |
+| `--primary-soft` | `#EDE9FE` | Purple tint backgrounds |
+| `--secondary` | `#F43F5E` | Rose/coral — badge highlights |
+| `--amber` | `#F59E0B` | Amber — "Few Left" badges |
+| `--text` | `#1E1B4B` | Primary text (deep indigo) |
+| `--text-2` | `#5B4F99` | Secondary text |
+| `--text-muted` | `#9B8FCC` | Labels, placeholders |
+| `--success` | `#10B981` | Green — confirmed tickets |
 
-Ambient background: `radial-gradient` with `rgba(200,169,110,0.05-0.08)` glows. Used on every page.
+Admin sidebar background: `#1E1B4B` (deep indigo) with white/purple text.
 
-Event card header gradients (assigned by index, cycling):
-- 0 → soft lavender `#EDE6F5 → #E4D8F0 → #EBE5F8`
-- 1 → soft rose `#F5E6E8 → #EEDAD8 → #F0E4EE`
-- 2 → soft sage `#E6F2E8 → #D9ECDB → #E5EFEB`
+Buttons are **pill-shaped** (`border-radius: 50px`). Cards use `border-radius: 20px`. Checkout panel uses `border-radius: 24px`.
+
+Colored box shadows use `rgba(124,58,237,...)` (purple-tinted) rather than neutral gray.
+
+---
+
+## Images (Unsplash)
+
+Event card images cycle through this array (index % length):
+```js
+const CARD_IMAGES = [
+  'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=700&q=80&fit=crop&auto=format',
+  'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=700&q=80&fit=crop&auto=format',
+  'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=700&q=80&fit=crop&auto=format',
+  'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=700&q=80&fit=crop&auto=format',
+  'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=700&q=80&fit=crop&auto=format',
+]
+```
+
+Hero background (index.html): `photo-1533174072545-7a4b6ad7a6c3` at 1920px wide.
+
+Event banner (event.html): cycles through the first 4 of the same set at 1200px, selected by `eventId.charCodeAt(0) % BANNER_IMAGES.length`.
 
 ---
 
@@ -58,18 +83,18 @@ Event card header gradients (assigned by index, cycling):
 │   ├── login.html          — Supabase email/password login
 │   └── index.html          — CMS dashboard (stats, events table, create/edit modal)
 ├── netlify/functions/
-│   ├── get-events.js       — GET published events (public)
-│   ├── get-event.js        — GET single event by id (public)
-│   ├── create-checkout.js  — POST create Stripe session → returns clientSecret
-│   ├── stripe-webhook.js   — POST handle checkout.session.completed
-│   ├── get-session.js      — GET session details for success page
+│   ├── get-events.js           — GET published events (public)
+│   ├── get-event.js            — GET single event by id (public)
+│   ├── create-checkout.js      — POST create Stripe session → returns clientSecret
+│   ├── stripe-webhook.js       — POST handle checkout.session.completed
+│   ├── get-session.js          — GET session details for success page
 │   ├── admin-get-events.js     — GET all events (auth required)
 │   ├── admin-create-event.js   — POST create event (auth required)
 │   ├── admin-update-event.js   — PUT update event (auth required)
 │   ├── admin-delete-event.js   — DELETE event (auth required)
 │   ├── admin-get-tickets.js    — GET all ticket sales (auth required)
 │   └── admin-toggle-publish.js — PATCH toggle published (auth required)
-├── js/config.js            — PUBLIC frontend keys (user must fill in)
+├── js/config.js            — PUBLIC frontend keys (Supabase URL/anon + Stripe PK)
 ├── supabase/schema.sql     — DB schema + RLS policies + seed data
 ├── netlify.toml            — Netlify build config
 ├── package.json            — Node deps for functions
@@ -96,7 +121,7 @@ SITE_URL                 ← https://your-site.netlify.app
 ADMIN_EMAIL
 ```
 
-Frontend public keys go in `js/config.js` (safe to expose):
+Frontend public keys go in `js/config.js` (safe to expose in browser):
 ```js
 window.KOVA_CONFIG = {
   SUPABASE_URL: '...',

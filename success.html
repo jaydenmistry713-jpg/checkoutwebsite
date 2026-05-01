@@ -5,49 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KOVA — Booking Confirmed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { -webkit-font-smoothing: antialiased; }
 
     :root {
-      --bg:          #FDFAF6;
-      --surface:     #FFFFFF;
-      --surface-2:   #F7F2EA;
-      --border:      #E6DFD5;
-      --border-light:#EDE8E1;
-      --accent:      #9A7B30;
-      --accent-bg:   #C8A96E;
-      --text:        #1A1612;
-      --text-2:      #6B6156;
-      --text-muted:  #A8A098;
-      --success:     #16853A;
+      --bg:           #F7F6FF;
+      --surface:      #FFFFFF;
+      --surface-2:    #F0EDFF;
+      --border:       #E0DAFF;
+      --border-light: #ECEAFF;
+      --primary:      #7C3AED;
+      --primary-hover:#6D28D9;
+      --primary-light:#A78BFA;
+      --primary-soft: #EDE9FE;
+      --secondary:    #F43F5E;
+      --amber:        #F59E0B;
+      --success:      #10B981;
+      --success-soft: #D1FAE5;
+      --text:         #1E1B4B;
+      --text-2:       #5B4F99;
+      --text-muted:   #9B8FCC;
     }
 
     body {
       background-color: var(--bg);
       background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(200,169,110,0.07) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 20%, rgba(200,169,110,0.05) 0%, transparent 45%);
+        radial-gradient(ellipse at 10% 20%, rgba(124,58,237,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(244,63,94,0.05) 0%, transparent 45%);
       font-family: 'Inter', sans-serif;
       color: var(--text);
       min-height: 100vh;
     }
 
     .header-glass {
-      background: rgba(253,250,246,0.88);
+      background: rgba(247,246,255,0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-light);
     }
 
-    /* Check ring */
     .check-ring {
-      width: 68px;
-      height: 68px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
-      border: 1.5px solid rgba(200,169,110,0.4);
-      background: rgba(200,169,110,0.06);
+      background: linear-gradient(135deg, var(--primary-soft), #FDF2F8);
+      border: 2px solid rgba(124,58,237,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -58,30 +62,28 @@
       position: absolute;
       inset: -9px;
       border-radius: 50%;
-      border: 1px solid rgba(200,169,110,0.15);
+      border: 1.5px solid rgba(124,58,237,0.1);
     }
 
-    /* Cards */
     .summary-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 2px 16px rgba(26,22,18,0.06);
+      box-shadow: 0 4px 24px rgba(124,58,237,0.08);
     }
-    .card-header {
+    .card-header-inner {
       padding: 14px 22px;
       border-bottom: 1px solid var(--border-light);
       background: var(--surface-2);
     }
     .card-label {
-      font-size: 11px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Poppins', sans-serif;
     }
 
-    /* Order rows */
     .order-row {
       display: flex;
       justify-content: space-between;
@@ -92,35 +94,32 @@
     }
     .order-row:last-child { border-bottom: none; }
 
-    /* Steps */
     .step-num {
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Poppins', sans-serif;
       font-size: 13px;
-      color: var(--accent);
+      font-weight: 700;
+      color: white;
       flex-shrink: 0;
     }
 
-    /* Buttons */
     .btn-outline {
       flex: 1;
       padding: 14px;
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       background: transparent;
       color: var(--text-2);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 50px;
       transition: all 0.2s;
       text-align: center;
       text-decoration: none;
@@ -128,142 +127,145 @@
       align-items: center;
       justify-content: center;
     }
-    .btn-outline:hover { border-color: var(--accent-bg); color: var(--accent); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
     .btn-filled {
       flex: 1;
       padding: 14px;
-      background: var(--text);
-      color: var(--surface);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 500;
+      background: var(--primary);
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
       cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.2s;
+      border-radius: 50px;
+      transition: all 0.2s;
       border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .btn-filled:hover { background: var(--accent); }
+    .btn-filled:hover { background: var(--primary-hover); transform: scale(1.02); }
 
-    /* Animations */
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-    .fade-up   { animation: fadeUp 0.55s ease both; }
-    .delay-1   { animation-delay: 0.05s; }
-    .delay-2   { animation-delay: 0.18s; }
-    .delay-3   { animation-delay: 0.32s; }
-    .delay-4   { animation-delay: 0.48s; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp 0.55s ease both; }
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.18s; }
+    .delay-3 { animation-delay: 0.32s; }
+    .delay-4 { animation-delay: 0.48s; }
 
-    /* Confetti dots (decorative) */
     .confetti-dot {
       position: absolute;
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      opacity: 0.4;
+      opacity: 0.5;
       animation: float 6s ease-in-out infinite;
     }
     @keyframes float {
       0%,100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-12px) rotate(180deg); }
+      50% { transform: translateY(-16px) rotate(180deg); }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
+  <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50 header-glass">
-    <nav style="max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
-      <a href="/" style="font-family:'Cormorant Garamond',serif;font-size:24px;letter-spacing:0.28em;color:var(--accent);font-weight:300;text-decoration:none;">KOVA</a>
-      <a href="/" style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-2)'">Back to Events</a>
+    <nav style="max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;">
+      <a href="/" style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;letter-spacing:0.06em;color:var(--primary);text-decoration:none;">KOVA</a>
+      <a href="/" style="font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-2)'">Back to Events</a>
     </nav>
   </header>
 
-  <!-- ── MAIN ── -->
+  <!-- MAIN -->
   <main style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 24px 60px;">
 
-    <!-- Decorative dots -->
-    <div class="confetti-dot" style="top:22%;left:12%;background:var(--accent-bg);animation-delay:-1s;animation-duration:7s;"></div>
-    <div class="confetti-dot" style="top:18%;right:14%;background:var(--accent-bg);width:4px;height:4px;animation-delay:-2.5s;animation-duration:8s;"></div>
-    <div class="confetti-dot" style="top:35%;left:6%;background:#B8D4C8;animation-delay:-0.5s;animation-duration:9s;"></div>
-    <div class="confetti-dot" style="bottom:25%;right:8%;background:var(--accent-bg);width:5px;height:5px;animation-delay:-3s;animation-duration:6.5s;"></div>
+    <!-- Floating dots -->
+    <div class="confetti-dot" style="top:20%;left:10%;background:var(--primary-light);animation-delay:-1s;animation-duration:7s;"></div>
+    <div class="confetti-dot" style="top:16%;right:12%;background:var(--secondary);width:6px;height:6px;animation-delay:-2.5s;animation-duration:8s;"></div>
+    <div class="confetti-dot" style="top:38%;left:5%;background:var(--amber);animation-delay:-0.5s;animation-duration:9s;"></div>
+    <div class="confetti-dot" style="bottom:22%;right:7%;background:var(--primary);width:5px;height:5px;animation-delay:-3s;animation-duration:6.5s;"></div>
+    <div class="confetti-dot" style="bottom:35%;left:8%;background:var(--success);width:6px;height:6px;animation-delay:-1.8s;animation-duration:7.5s;"></div>
 
     <div style="width:100%;max-width:480px;">
 
-      <!-- Success icon -->
+      <!-- Check icon -->
       <div style="display:flex;justify-content:center;margin-bottom:28px;" class="fade-up">
         <div class="check-ring">
-          <svg width="26" height="20" viewBox="0 0 26 20" fill="none">
-            <path d="M2 10l7 8L24 2" stroke="var(--accent-bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
+            <path d="M2 11l8 9L26 2" stroke="var(--primary)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
 
       <!-- Headline -->
       <div style="text-align:center;margin-bottom:32px;" class="fade-up delay-1">
-        <p style="font-size:11px;letter-spacing:0.42em;text-transform:uppercase;color:var(--accent-bg);margin-bottom:10px;">Booking Confirmed</p>
-        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,8vw,60px);font-weight:300;font-style:italic;letter-spacing:0.02em;color:var(--text);line-height:1.05;margin-bottom:12px;">You're on the list.</h1>
-        <p style="font-size:13px;color:var(--text-2);font-weight:300;line-height:1.7;max-width:360px;margin:0 auto;">Your tickets are secured. A confirmation with your e-ticket has been sent to your inbox.</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--success-soft);border-radius:50px;padding:5px 14px;margin-bottom:14px;">
+          <span style="font-size:12px;font-weight:600;color:var(--success);">Booking Confirmed</span>
+        </div>
+        <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(36px,8vw,54px);font-weight:800;color:var(--text);line-height:1.1;margin-bottom:12px;">You're on the list!</h1>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.7;max-width:360px;margin:0 auto;">Your tickets are secured. A confirmation with your e-ticket has been sent to your inbox.</p>
       </div>
 
       <!-- Order summary -->
       <div class="summary-card fade-up delay-2" style="margin-bottom:16px;">
-        <div class="card-header">
+        <div class="card-header-inner">
           <p class="card-label">Order Summary</p>
         </div>
         <div style="padding:4px 22px 10px;">
           <div class="order-row">
-            <span style="color:var(--text-muted);">Event</span>
-            <span id="summary-event" style="font-weight:300;text-align:right;max-width:55%;">—</span>
+            <span style="color:var(--text-muted);font-weight:500;">Event</span>
+            <span id="summary-event" style="font-weight:600;text-align:right;max-width:55%;">—</span>
           </div>
           <div class="order-row">
-            <span style="color:var(--text-muted);">Date</span>
-            <span id="summary-date" style="font-weight:300;">—</span>
+            <span style="color:var(--text-muted);font-weight:500;">Date</span>
+            <span id="summary-date" style="font-weight:400;">—</span>
           </div>
           <div class="order-row">
-            <span style="color:var(--text-muted);">Venue</span>
-            <span id="summary-venue" style="font-weight:300;text-align:right;max-width:55%;">—</span>
+            <span style="color:var(--text-muted);font-weight:500;">Venue</span>
+            <span id="summary-venue" style="font-weight:400;text-align:right;max-width:55%;">—</span>
           </div>
           <div class="order-row">
-            <span style="color:var(--text-muted);">Tickets</span>
-            <span id="summary-qty" style="font-weight:300;">—</span>
+            <span style="color:var(--text-muted);font-weight:500;">Tickets</span>
+            <span id="summary-qty" style="font-weight:400;">—</span>
           </div>
           <div class="order-row">
-            <span style="color:var(--text-muted);">Total Paid</span>
-            <span id="summary-total" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--accent);">—</span>
+            <span style="color:var(--text-muted);font-weight:500;">Total Paid</span>
+            <span id="summary-total" style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:var(--primary);">—</span>
           </div>
           <div class="order-row">
-            <span style="color:var(--text-muted);">Reference</span>
-            <span id="summary-ref" style="font-family:monospace;font-size:11px;color:var(--text-2);letter-spacing:0.05em;">—</span>
+            <span style="color:var(--text-muted);font-weight:500;">Reference</span>
+            <span id="summary-ref" style="font-family:monospace;font-size:11px;color:var(--text-2);">—</span>
           </div>
         </div>
       </div>
 
       <!-- Next steps -->
       <div class="summary-card fade-up delay-3" style="margin-bottom:20px;">
-        <div class="card-header">
+        <div class="card-header-inner">
           <p class="card-label">Next Steps</p>
         </div>
         <div style="padding:16px 22px;display:flex;flex-direction:column;gap:16px;">
           <div style="display:flex;align-items:flex-start;gap:14px;">
             <div class="step-num">1</div>
             <div>
-              <p style="font-size:13px;font-weight:400;color:var(--text);margin-bottom:3px;">Check your email</p>
-              <p style="font-size:12px;color:var(--text-2);font-weight:300;line-height:1.5;">Your e-ticket and booking details have been sent to the address you provided at checkout.</p>
+              <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">Check your email</p>
+              <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Your e-ticket and booking details have been sent to the address you provided at checkout.</p>
             </div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:14px;">
             <div class="step-num">2</div>
             <div>
-              <p style="font-size:13px;font-weight:400;color:var(--text);margin-bottom:3px;">Save the date</p>
-              <p style="font-size:12px;color:var(--text-2);font-weight:300;line-height:1.5;">Add the event to your calendar so you don't forget. Doors open 30 minutes before start.</p>
+              <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">Save the date</p>
+              <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Add the event to your calendar so you don't forget. Doors open 30 minutes before start.</p>
             </div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:14px;">
             <div class="step-num">3</div>
             <div>
-              <p style="font-size:13px;font-weight:400;color:var(--text);margin-bottom:3px;">Arrive with ID</p>
-              <p style="font-size:12px;color:var(--text-2);font-weight:300;line-height:1.5;">Bring valid photo ID. Your ticket will be scanned at the door.</p>
+              <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;">Arrive with ID</p>
+              <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Bring valid photo ID. Your ticket will be scanned at the door.</p>
             </div>
           </div>
         </div>
@@ -278,7 +280,7 @@
     </div>
   </main>
 
-  <!-- ── SCRIPTS ── -->
+  <!-- SCRIPTS -->
   <script src="/js/config.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search)

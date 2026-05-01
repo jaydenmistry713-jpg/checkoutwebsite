@@ -24,7 +24,7 @@
 
 ### [0:00 – 0:06] — Homepage Hero
 
-**Screen action:** Open `https://your-site.netlify.app` and let it load.
+**Screen action:** Open `https://your-site.netlify.app` and let it load. The full-screen concert photo hero with "LIVE YOUR / BEST NIGHT." headline should be visible.
 
 **Narration:**
 > *"This is KOVA — a simple, beautiful way for event businesses to sell tickets online, no code required."*
@@ -33,7 +33,7 @@
 
 ### [0:06 – 0:14] — Events Grid
 
-**Screen action:** Slowly scroll down to reveal the events grid. Hover over the ECLIPSE card.
+**Screen action:** Slowly scroll down to reveal the events grid. Hover over the ECLIPSE card — the photo zooms in on hover and the card lifts with a purple shadow.
 
 **Narration:**
 > *"Your upcoming events appear here automatically — each one with availability, pricing, and a clear call to action."*
@@ -42,7 +42,7 @@
 
 ### [0:14 – 0:22] — Event Detail Page
 
-**Screen action:** Click on the ECLIPSE event card. Wait for the page to load, then let the camera settle on the two-column layout.
+**Screen action:** Click on the ECLIPSE event card. Wait for the page to load — the concert photo banner with "ECLIPSE" in bold white fills the top. Let the camera settle on the two-column layout below.
 
 **Narration:**
 > *"Each event gets its own page with full details. On the right — a live ticket panel that updates in real time."*
@@ -64,7 +64,7 @@
 
 ### [0:32 – 0:38] — Confirmation Page
 
-**Screen action:** Cut to the `success.html` page (pre-loaded with a test session). Show the gold checkmark and order summary.
+**Screen action:** Cut to the `success.html` page (pre-loaded with a test session). Show the purple checkmark ring, "You're on the list!" headline, and the floating coloured dots in the background.
 
 **Narration:**
 > *"Once payment goes through, they land here. An order confirmation email fires automatically."*
@@ -75,8 +75,8 @@
 
 **Screen action:**
 1. Navigate to `/admin/index.html`
-2. Let the stats cards load — show Total Events, Tickets Sold, Revenue
-3. Scroll down to the events table showing ECLIPSE with its progress bar
+2. Let the stats cards load — show Total Events (purple icon), Tickets Sold (amber icon), Revenue (pink icon)
+3. Scroll down to the events table showing ECLIPSE with its progress bar and the deep indigo sidebar visible on the left
 
 **Narration:**
 > *"Behind the scenes — a clean admin dashboard. You can see ticket sales at a glance, revenue, and capacity."*
@@ -114,7 +114,7 @@
   - `"Automated email confirmations"` on the success page
   - `"Live revenue tracking"` on the admin dashboard
 - Target export: 1080×1920 (story/reel vertical crop of key moments) + 1920×1080 (standard)
-- Thumbnail: Homepage hero at the 0:05 mark (before scroll)
+- Thumbnail: Homepage hero at the 0:05 mark — concert photo with gradient headline visible
 
 ---
 

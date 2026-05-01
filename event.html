@@ -5,49 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KOVA — Event</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { -webkit-font-smoothing: antialiased; }
 
     :root {
-      --bg:         #FDFAF6;
-      --surface:    #FFFFFF;
-      --surface-2:  #F7F2EA;
-      --border:     #E6DFD5;
-      --border-light: #EDE8E1;
-      --accent:     #9A7B30;
-      --accent-bg:  #C8A96E;
-      --text:       #1A1612;
-      --text-2:     #6B6156;
-      --text-muted: #A8A098;
+      --bg:           #F7F6FF;
+      --surface:      #FFFFFF;
+      --surface-2:    #F0EDFF;
+      --border:       #E0DAFF;
+      --border-light: #ECEAFF;
+      --primary:      #7C3AED;
+      --primary-hover:#6D28D9;
+      --primary-light:#A78BFA;
+      --primary-soft: #EDE9FE;
+      --secondary:    #F43F5E;
+      --text:         #1E1B4B;
+      --text-2:       #5B4F99;
+      --text-muted:   #9B8FCC;
     }
 
     body {
       background-color: var(--bg);
-      background-image:
-        radial-gradient(ellipse at 10% 60%, rgba(200,169,110,0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 20%, rgba(200,169,110,0.04) 0%, transparent 45%);
       font-family: 'Inter', sans-serif;
       color: var(--text);
     }
 
     .header-glass {
-      background: rgba(253,250,246,0.88);
+      background: rgba(247,246,255,0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-light);
     }
 
-    /* Event banner */
     .event-banner {
-      min-height: 340px;
+      min-height: 380px;
       display: flex;
       align-items: flex-end;
-      padding: 48px 0 40px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 61px;
+    }
+    .event-banner-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .event-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(30,27,75,0.25) 0%, rgba(30,27,75,0.82) 100%);
+    }
+    .event-banner-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      width: 100%;
     }
 
-    /* Info rows */
     .info-row {
       display: flex;
       align-items: flex-start;
@@ -57,36 +77,33 @@
     }
     .info-row:last-child { border-bottom: none; }
     .info-icon {
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--border);
-      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      color: var(--accent-bg);
-      background: var(--surface-2);
+      background: var(--primary-soft);
+      color: var(--primary);
     }
-    .info-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
-    .info-value { font-size: 14px; color: var(--text); font-weight: 300; }
+    .info-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; font-weight: 600; }
+    .info-value { font-size: 14px; color: var(--text); font-weight: 400; }
 
-    /* Checkout panel */
     .checkout-panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(26,22,18,0.07);
+      box-shadow: 0 8px 40px rgba(124,58,237,0.12);
       position: sticky;
-      top: 96px;
+      top: 90px;
     }
 
-    /* Quantity control */
     .qty-btn {
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--border);
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--border);
       background: var(--surface-2);
       color: var(--text);
       display: flex;
@@ -94,33 +111,32 @@
       justify-content: center;
       cursor: pointer;
       font-size: 18px;
-      border-radius: 4px;
-      transition: border-color 0.15s, background 0.15s;
+      font-weight: 700;
+      border-radius: 50%;
+      transition: all 0.15s;
       user-select: none;
     }
-    .qty-btn:hover { border-color: var(--accent-bg); background: var(--surface); }
+    .qty-btn:hover { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
 
-    /* Primary button */
     .btn-primary {
       width: 100%;
       padding: 15px;
-      background: var(--text);
-      color: var(--surface);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
+      background: var(--primary);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
       border: none;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      border-radius: 4px;
+      gap: 8px;
+      border-radius: 50px;
     }
-    .btn-primary:hover { background: var(--accent); }
-    .btn-primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+    .btn-primary:hover { background: var(--primary-hover); transform: scale(1.02); }
+    .btn-primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; transform: none; }
 
     .trust-badge {
       display: flex;
@@ -128,6 +144,7 @@
       gap: 5px;
       font-size: 11px;
       color: var(--text-muted);
+      font-weight: 500;
     }
 
     .what-list li {
@@ -137,46 +154,59 @@
       font-size: 13px;
       color: var(--text-2);
       line-height: 1.6;
-      font-weight: 300;
-      padding: 8px 0;
+      padding: 10px 0;
       border-bottom: 1px solid var(--border-light);
     }
     .what-list li:last-child { border-bottom: none; }
-    .what-list .dash { color: var(--accent-bg); flex-shrink: 0; margin-top: 1px; }
+    .what-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: var(--primary);
+    }
 
-    /* Skeleton */
     .skeleton {
-      background: linear-gradient(90deg, #EEE8DE 25%, #F5F0E8 50%, #EEE8DE 75%);
+      background: linear-gradient(90deg, #ECEAFF 25%, #F0EDFF 50%, #ECEAFF 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
-      border-radius: 4px;
+      border-radius: 8px;
     }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    @keyframes spin { to { transform: rotate(360deg) } }
 
     @media (max-width: 1024px) {
       .checkout-panel { position: static; }
+      .event-layout { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
+  <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50 header-glass">
-    <nav style="max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
-      <a href="/" style="font-family:'Cormorant Garamond',serif;font-size:24px;letter-spacing:0.28em;color:var(--accent);font-weight:300;text-decoration:none;">KOVA</a>
-      <a href="/" style="display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-2)'">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 1L3 6.5l5 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <nav style="max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;">
+      <a href="/" style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;letter-spacing:0.06em;color:var(--primary);text-decoration:none;">KOVA</a>
+      <a href="/" style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-2)'">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 1L3 6.5l5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         All Events
       </a>
     </nav>
   </header>
 
-  <!-- ── EVENT BANNER ── -->
-  <div id="event-banner" class="event-banner" style="background:linear-gradient(140deg,#EDE6F5 0%,#E4D8F0 45%,#EBE5F8 100%);margin-top:60px;">
-    <div style="max-width:1200px;margin:0 auto;padding:0 24px;width:100%;">
+  <!-- EVENT BANNER -->
+  <div id="event-banner" class="event-banner">
+    <img id="banner-img" class="event-banner-img" src="" alt="" />
+    <div class="event-banner-overlay"></div>
+    <div class="event-banner-content">
       <div id="hero-content">
-        <div class="skeleton" style="height:12px;width:180px;margin-bottom:18px;"></div>
-        <div class="skeleton" style="height:70px;width:60%;margin-bottom:14px;"></div>
+        <div class="skeleton" style="height:12px;width:160px;margin-bottom:16px;"></div>
+        <div class="skeleton" style="height:58px;width:60%;margin-bottom:14px;"></div>
         <div style="display:flex;gap:16px;flex-wrap:wrap;">
           <div class="skeleton" style="height:14px;width:180px;"></div>
           <div class="skeleton" style="height:14px;width:140px;"></div>
@@ -185,94 +215,102 @@
     </div>
   </div>
 
-  <!-- ── MAIN ── -->
+  <!-- MAIN -->
   <div style="max-width:1200px;margin:0 auto;padding:40px 24px 80px;">
-    <div style="display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start;" class="lg:grid event-layout">
+    <div style="display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start;" class="event-layout">
 
-      <!-- LEFT: Details -->
+      <!-- LEFT -->
       <div>
-        <!-- About -->
         <div style="margin-bottom:32px;">
-          <p style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-bg);margin-bottom:14px;">About This Event</p>
-          <div id="event-description" style="font-size:15px;color:var(--text-2);line-height:1.75;font-weight:300;"></div>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:var(--primary-soft);border-radius:50px;padding:5px 14px;margin-bottom:16px;">
+            <span style="font-size:12px;font-weight:600;color:var(--primary);">About This Event</span>
+          </div>
+          <div id="event-description" style="font-size:15px;color:var(--text-2);line-height:1.8;"></div>
         </div>
 
-        <!-- Info block -->
-        <div id="event-info" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px;box-shadow:0 1px 8px rgba(26,22,18,0.04);">
-          <div style="padding:14px 20px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
-            <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);">Event Details</p>
+        <div id="event-info" style="background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:24px;box-shadow:0 2px 16px rgba(124,58,237,0.06);">
+          <div style="padding:16px 22px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
+            <p style="font-size:13px;font-weight:700;color:var(--primary);">Event Details</p>
           </div>
-          <div id="info-rows" style="padding:0 20px;"></div>
+          <div id="info-rows" style="padding:0 22px;"></div>
         </div>
 
-        <!-- What to expect -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 1px 8px rgba(26,22,18,0.04);">
-          <div style="padding:14px 20px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
-            <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);">What to Expect</p>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 2px 16px rgba(124,58,237,0.06);">
+          <div style="padding:16px 22px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
+            <p style="font-size:13px;font-weight:700;color:var(--primary);">What to Expect</p>
           </div>
-          <ul class="what-list" style="padding:4px 20px 8px;">
-            <li><span class="dash">—</span><span>Your e-ticket will be emailed immediately upon payment confirmation.</span></li>
-            <li><span class="dash">—</span><span>Doors open 30 minutes before the event start time.</span></li>
-            <li><span class="dash">—</span><span>Tickets are non-refundable but transferable up to 48 hours before the event.</span></li>
-            <li><span class="dash">—</span><span>A valid photo ID is required on entry for all guests.</span></li>
+          <ul class="what-list" style="padding:4px 22px 8px;">
+            <li>
+              <div class="what-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span>Your e-ticket will be emailed immediately upon payment confirmation.</span>
+            </li>
+            <li>
+              <div class="what-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span>Doors open 30 minutes before the event start time.</span>
+            </li>
+            <li>
+              <div class="what-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span>Tickets are non-refundable but transferable up to 48 hours before the event.</span>
+            </li>
+            <li>
+              <div class="what-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span>A valid photo ID is required on entry for all guests.</span>
+            </li>
           </ul>
         </div>
       </div>
 
-      <!-- RIGHT: Ticket panel -->
+      <!-- RIGHT -->
       <div>
         <div class="checkout-panel">
-          <!-- Panel header -->
-          <div style="padding:18px 22px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
-            <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);margin-bottom:3px;">Purchase Tickets</p>
-            <p id="tickets-remaining" style="font-size:12px;color:var(--text-muted);font-weight:300;"></p>
+          <div style="padding:20px 24px;border-bottom:1px solid var(--border-light);background:var(--primary-soft);">
+            <p style="font-size:15px;font-weight:700;font-family:'Poppins',sans-serif;color:var(--primary);margin-bottom:4px;">Get Tickets</p>
+            <p id="tickets-remaining" style="font-size:12px;color:var(--text-muted);font-weight:500;"></p>
           </div>
 
-          <!-- Selector -->
-          <div id="ticket-selector" style="padding:22px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+          <div id="ticket-selector" style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
               <div>
-                <p style="font-size:13px;color:var(--text);font-weight:400;margin-bottom:4px;">General Admission</p>
-                <p id="price-per-ticket" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--accent);line-height:1;"></p>
+                <p style="font-size:13px;color:var(--text-2);font-weight:500;margin-bottom:4px;">General Admission</p>
+                <p id="price-per-ticket" style="font-family:'Poppins',sans-serif;font-size:36px;font-weight:700;color:var(--primary);line-height:1;"></p>
               </div>
-              <div style="display:flex;align-items:center;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;">
                 <button class="qty-btn" onclick="changeQty(-1)">−</button>
-                <div id="qty-display" style="width:40px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--text);">1</div>
+                <div id="qty-display" style="width:42px;text-align:center;font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--text);">1</div>
                 <button class="qty-btn" onclick="changeQty(1)">+</button>
               </div>
             </div>
 
-            <!-- Price breakdown -->
-            <div style="padding:14px 0;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);margin-bottom:18px;">
-              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:8px;font-weight:300;">
-                <span>Per ticket</span><span id="unit-price"></span>
+            <div style="background:var(--surface-2);border-radius:14px;padding:14px 16px;margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:8px;">
+                <span>Per ticket</span><span id="unit-price" style="font-weight:600;"></span>
               </div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:8px;font-weight:300;">
-                <span>Quantity</span><span id="qty-summary">× 1</span>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:8px;">
+                <span>Quantity</span><span id="qty-summary" style="font-weight:600;">× 1</span>
               </div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);font-weight:300;">
-                <span>Booking fee</span><span>Included</span>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);">
+                <span>Booking fee</span><span style="font-weight:600;">Included</span>
               </div>
             </div>
 
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;">
-              <span style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);">Total</span>
-              <span id="total-price" style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--text);"></span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;padding:0 2px;">
+              <span style="font-size:13px;font-weight:600;color:var(--text-muted);">Total</span>
+              <span id="total-price" style="font-family:'Poppins',sans-serif;font-size:40px;font-weight:800;color:var(--text);"></span>
             </div>
 
             <button id="checkout-btn" class="btn-primary" onclick="startCheckout()">
-              <svg width="15" height="12" viewBox="0 0 15 12" fill="none"><rect x="1" y="2" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h13" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="8.5" r="0.9" fill="currentColor"/></svg>
+              <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="1" y="2" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 5.5h14" stroke="currentColor" stroke-width="1.4"/><circle cx="4.5" cy="8.5" r="0.9" fill="currentColor"/></svg>
               Proceed to Checkout
             </button>
 
-            <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-top:12px;">
+            <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px;">
               <div class="trust-badge">
-                <svg width="11" height="13" viewBox="0 0 11 13" fill="none"><path d="M5.5 1L1 3v3.5C1 9.5 3 11.5 5.5 12 8 11.5 10 9.5 10 6.5V3L5.5 1z" stroke="currentColor" stroke-width="1"/></svg>
+                <svg width="11" height="13" viewBox="0 0 11 13" fill="none"><path d="M5.5 1L1 3v3.5C1 9.5 3 11.5 5.5 12 8 11.5 10 9.5 10 6.5V3L5.5 1z" stroke="currentColor" stroke-width="1.1"/></svg>
                 Secure
               </div>
               <div style="width:1px;height:12px;background:var(--border);"></div>
               <div class="trust-badge">
-                <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 8V2a1 1 0 011-1h8a1 1 0 011 1v6a1 1 0 01-1 1H2a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1"/><path d="M1 4h10" stroke="currentColor" stroke-width="1"/></svg>
+                <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 8V2a1 1 0 011-1h8a1 1 0 011 1v6a1 1 0 01-1 1H2a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1.1"/><path d="M1 4h10" stroke="currentColor" stroke-width="1.1"/></svg>
                 Stripe
               </div>
               <div style="width:1px;height:12px;background:var(--border);"></div>
@@ -283,35 +321,26 @@
             </div>
           </div>
 
-          <!-- Stripe embedded checkout -->
           <div id="stripe-checkout-container" style="display:none;padding:12px 12px 16px;"></div>
 
-          <!-- Loading -->
           <div id="checkout-loading" style="display:none;padding:40px;text-align:center;">
-            <div style="display:inline-block;width:22px;height:22px;border:2px solid rgba(200,169,110,0.25);border-top-color:var(--accent-bg);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:12px;"></div>
-            <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);">Preparing checkout…</p>
+            <div style="display:inline-block;width:24px;height:24px;border:3px solid var(--primary-soft);border-top-color:var(--primary);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:12px;"></div>
+            <p style="font-size:13px;color:var(--text-muted);font-weight:500;">Preparing checkout…</p>
           </div>
-          <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
         </div>
       </div>
     </div>
   </div>
 
-  <style>
-    @media (max-width: 1024px) {
-      .event-layout { grid-template-columns: 1fr !important; }
-    }
-  </style>
-
-  <!-- ── FOOTER ── -->
-  <footer style="background:var(--surface-2);border-top:1px solid var(--border);">
+  <!-- FOOTER -->
+  <footer style="background:var(--text);">
     <div style="max-width:1200px;margin:0 auto;padding:28px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:0.28em;color:var(--accent);">KOVA</span>
-      <p style="font-size:11px;color:var(--text-muted);letter-spacing:0.1em;">© 2026 KOVA Events Ltd</p>
+      <span style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;letter-spacing:0.06em;color:#A78BFA;">KOVA</span>
+      <p style="font-size:12px;color:rgba(255,255,255,0.35);">© 2026 KOVA Events Ltd</p>
     </div>
   </footer>
 
-  <!-- ── SCRIPTS ── -->
+  <!-- SCRIPTS -->
   <script src="/js/config.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <script>
@@ -320,10 +349,11 @@
     let eventData = null
     let quantity = 1
 
-    const BANNER_GRADIENTS = [
-      'linear-gradient(140deg,#EDE6F5 0%,#E4D8F0 45%,#EBE5F8 100%)',
-      'linear-gradient(140deg,#F5E6E8 0%,#EEDAD8 45%,#F0E4EE 100%)',
-      'linear-gradient(140deg,#E6F2E8 0%,#D9ECDB 45%,#E5EFEB 100%)',
+    const BANNER_IMAGES = [
+      'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1200&q=80&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200&q=80&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1200&q=80&fit=crop&auto=format',
     ]
 
     function fmt(d) { return new Date(d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) }
@@ -352,18 +382,23 @@
       if (!eventData||eventData.error) { window.location.href='/'; return }
 
       document.title = `KOVA — ${eventData.title}`
-      document.getElementById('event-banner').style.background = BANNER_GRADIENTS[0]
+
+      const imgIdx = eventId.charCodeAt(0) % BANNER_IMAGES.length
+      document.getElementById('banner-img').src = BANNER_IMAGES[imgIdx]
+      document.getElementById('banner-img').alt = eventData.title
 
       const avail = eventData.tickets_available - (eventData.tickets_sold||0)
       document.getElementById('hero-content').innerHTML = `
-        <p style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(154,123,48,0.8);margin-bottom:12px;font-family:'Inter',sans-serif;">KOVA Events · London</p>
-        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7vw,82px);font-weight:300;letter-spacing:0.06em;color:var(--text);line-height:0.95;margin-bottom:18px;">${eventData.title}</h1>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);border-radius:50px;padding:5px 16px;margin-bottom:14px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.9);">KOVA Events · London</span>
+        </div>
+        <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(36px,6vw,72px);font-weight:800;color:white;line-height:1.05;margin-bottom:16px;">${eventData.title}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
-          <span style="font-size:14px;color:var(--text-2);font-weight:300;">${fmt(eventData.date)}</span>
-          <span style="color:var(--border);font-size:12px;">·</span>
-          <span style="font-size:14px;color:var(--text-2);font-weight:300;">${eventData.venue}</span>
-          <span style="color:var(--border);font-size:12px;">·</span>
-          <span style="font-size:13px;${avail<=0?'color:#B83030':avail<=20?'color:#9A7B30':'color:var(--text-2)'};">${avail>0?avail+' tickets remaining':'Sold out'}</span>
+          <span style="font-size:14px;color:rgba(255,255,255,0.85);font-weight:400;">${fmt(eventData.date)}</span>
+          <span style="color:rgba(255,255,255,0.35);">·</span>
+          <span style="font-size:14px;color:rgba(255,255,255,0.85);">${eventData.venue}</span>
+          <span style="color:rgba(255,255,255,0.35);">·</span>
+          <span style="font-size:13px;font-weight:600;${avail<=0?'color:#FCA5A5':avail<=20?'color:#FDE68A':'color:#6EE7B7'};">${avail>0?avail+' tickets left':'Sold out'}</span>
         </div>
       `
 

@@ -6,29 +6,30 @@
   <title>KOVA Admin — Sign In</title>
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 
     :root {
-      --bg:         #FDFAF6;
-      --surface:    #FFFFFF;
-      --surface-2:  #F7F2EA;
-      --border:     #E6DFD5;
-      --border-light:#EDE8E1;
-      --accent:     #9A7B30;
-      --accent-bg:  #C8A96E;
-      --text:       #1A1612;
-      --text-2:     #6B6156;
-      --text-muted: #A8A098;
+      --bg:           #F7F6FF;
+      --surface:      #FFFFFF;
+      --surface-2:    #F0EDFF;
+      --border:       #E0DAFF;
+      --border-light: #ECEAFF;
+      --primary:      #7C3AED;
+      --primary-hover:#6D28D9;
+      --primary-soft: #EDE9FE;
+      --text:         #1E1B4B;
+      --text-2:       #5B4F99;
+      --text-muted:   #9B8FCC;
     }
 
     body {
       background-color: var(--bg);
       background-image:
-        radial-gradient(ellipse at 20% 60%, rgba(200,169,110,0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(200,169,110,0.06) 0%, transparent 45%);
+        radial-gradient(ellipse at 15% 30%, rgba(124,58,237,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 75%, rgba(244,63,94,0.05) 0%, transparent 45%);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
@@ -39,71 +40,56 @@
 
     .login-wrap {
       width: 100%;
-      max-width: 380px;
+      max-width: 400px;
+      animation: fadeUp 0.45s ease both;
     }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
     .logo-area {
       text-align: center;
-      margin-bottom: 32px;
-    }
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 30px;
-      letter-spacing: 0.32em;
-      color: var(--accent);
-      font-weight: 300;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 4px;
-    }
-    .logo-sub {
-      font-size: 10px;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--text-muted);
+      margin-bottom: 28px;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(26,22,18,0.08);
+      box-shadow: 0 8px 40px rgba(124,58,237,0.1);
     }
     .card-top {
-      padding: 24px 28px 20px;
+      padding: 26px 28px 22px;
       border-bottom: 1px solid var(--border-light);
-      background: var(--surface-2);
+      background: linear-gradient(135deg, var(--primary-soft) 0%, #FDF2F8 100%);
     }
-    .card-body {
-      padding: 26px 28px 28px;
-    }
+    .card-body { padding: 28px 28px 30px; }
 
     .form-group { margin-bottom: 18px; }
     .form-label {
       display: block;
-      font-size: 11px;
-      letter-spacing: 0.14em;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
     .form-input {
       width: 100%;
       background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       padding: 12px 14px;
       color: var(--text);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
-      font-weight: 300;
+      font-weight: 400;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .form-input:focus {
-      border-color: var(--accent-bg);
-      box-shadow: 0 0 0 3px rgba(200,169,110,0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
       background: var(--surface);
     }
     .form-input::placeholder { color: var(--text-muted); }
@@ -111,52 +97,45 @@
     .btn-submit {
       width: 100%;
       padding: 14px;
-      background: var(--text);
-      color: var(--surface);
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
+      background: var(--primary);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
       border: none;
-      border-radius: 6px;
+      border-radius: 50px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
       margin-top: 6px;
     }
-    .btn-submit:hover { background: var(--accent); }
-    .btn-submit:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+    .btn-submit:hover { background: var(--primary-hover); transform: scale(1.02); }
+    .btn-submit:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; transform: none; }
 
     .error-banner {
-      background: rgba(200,60,60,0.07);
-      border: 1px solid rgba(200,60,60,0.2);
-      border-radius: 6px;
+      background: rgba(244,63,94,0.07);
+      border: 1.5px solid rgba(244,63,94,0.2);
+      border-radius: 12px;
       padding: 10px 14px;
       font-size: 13px;
-      color: #B83030;
+      color: #DC2626;
       margin-bottom: 18px;
       display: none;
     }
-
-    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-    .login-wrap { animation: fadeUp 0.45s ease both; }
   </style>
 </head>
 <body>
 
   <div class="login-wrap">
 
-    <!-- Logo -->
     <div class="logo-area">
-      <a href="/" class="logo">KOVA</a>
-      <div class="logo-sub">Admin Portal</div>
+      <a href="/" style="font-family:'Poppins',sans-serif;font-size:28px;font-weight:800;letter-spacing:0.06em;color:var(--primary);text-decoration:none;display:inline-block;margin-bottom:6px;">KOVA</a>
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Admin Portal</div>
     </div>
 
-    <!-- Card -->
     <div class="card">
       <div class="card-top">
-        <h1 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--text);margin-bottom:4px;">Welcome back</h1>
-        <p style="font-size:13px;color:var(--text-2);font-weight:300;">Sign in to manage your events and ticket sales.</p>
+        <h1 style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:5px;">Welcome back 👋</h1>
+        <p style="font-size:13px;color:var(--text-2);">Sign in to manage your events and ticket sales.</p>
       </div>
 
       <div class="card-body">
@@ -176,13 +155,13 @@
       </div>
     </div>
 
-    <p style="text-align:center;margin-top:18px;font-size:12px;color:var(--text-muted);">
-      <a href="/" style="color:var(--text-2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-2)'">← Back to website</a>
+    <p style="text-align:center;margin-top:18px;font-size:13px;color:var(--text-muted);">
+      <a href="/" style="color:var(--text-2);font-weight:500;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-2)'">← Back to website</a>
     </p>
 
   </div>
 
-  <!-- ── SCRIPTS ── -->
+  <!-- SCRIPTS -->
   <script src="/js/config.js"></script>
   <script>
     const { createClient } = supabase

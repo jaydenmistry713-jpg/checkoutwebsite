@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KOVA — Event</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { -webkit-font-smoothing: antialiased; }
+
+    :root {
+      --bg:         #FDFAF6;
+      --surface:    #FFFFFF;
+      --surface-2:  #F7F2EA;
+      --border:     #E6DFD5;
+      --border-light: #EDE8E1;
+      --accent:     #9A7B30;
+      --accent-bg:  #C8A96E;
+      --text:       #1A1612;
+      --text-2:     #6B6156;
+      --text-muted: #A8A098;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 10% 60%, rgba(200,169,110,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 20%, rgba(200,169,110,0.04) 0%, transparent 45%);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+
+    .header-glass {
+      background: rgba(253,250,246,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    /* Event banner */
+    .event-banner {
+      min-height: 340px;
+      display: flex;
+      align-items: flex-end;
+      padding: 48px 0 40px;
+    }
+
+    /* Info rows */
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent-bg);
+      background: var(--surface-2);
+    }
+    .info-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
+    .info-value { font-size: 14px; color: var(--text); font-weight: 300; }
+
+    /* Checkout panel */
+    .checkout-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(26,22,18,0.07);
+      position: sticky;
+      top: 96px;
+    }
+
+    /* Quantity control */
+    .qty-btn {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 4px;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .qty-btn:hover { border-color: var(--accent-bg); background: var(--surface); }
+
+    /* Primary button */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: var(--text);
+      color: var(--surface);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 4px;
+    }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .what-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+      font-weight: 300;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .what-list li:last-child { border-bottom: none; }
+    .what-list .dash { color: var(--accent-bg); flex-shrink: 0; margin-top: 1px; }
+
+    /* Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #EEE8DE 25%, #F5F0E8 50%, #EEE8DE 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    @media (max-width: 1024px) {
+      .checkout-panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="fixed top-0 left-0 right-0 z-50 header-glass">
+    <nav style="max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+      <a href="/" style="font-family:'Cormorant Garamond',serif;font-size:24px;letter-spacing:0.28em;color:var(--accent);font-weight:300;text-decoration:none;">KOVA</a>
+      <a href="/" style="display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-2)'">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 1L3 6.5l5 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        All Events
+      </a>
+    </nav>
+  </header>
+
+  <!-- ── EVENT BANNER ── -->
+  <div id="event-banner" class="event-banner" style="background:linear-gradient(140deg,#EDE6F5 0%,#E4D8F0 45%,#EBE5F8 100%);margin-top:60px;">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;width:100%;">
+      <div id="hero-content">
+        <div class="skeleton" style="height:12px;width:180px;margin-bottom:18px;"></div>
+        <div class="skeleton" style="height:70px;width:60%;margin-bottom:14px;"></div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div class="skeleton" style="height:14px;width:180px;"></div>
+          <div class="skeleton" style="height:14px;width:140px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <div style="max-width:1200px;margin:0 auto;padding:40px 24px 80px;">
+    <div style="display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start;" class="lg:grid event-layout">
+
+      <!-- LEFT: Details -->
+      <div>
+        <!-- About -->
+        <div style="margin-bottom:32px;">
+          <p style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-bg);margin-bottom:14px;">About This Event</p>
+          <div id="event-description" style="font-size:15px;color:var(--text-2);line-height:1.75;font-weight:300;"></div>
+        </div>
+
+        <!-- Info block -->
+        <div id="event-info" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px;box-shadow:0 1px 8px rgba(26,22,18,0.04);">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
+            <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);">Event Details</p>
+          </div>
+          <div id="info-rows" style="padding:0 20px;"></div>
+        </div>
+
+        <!-- What to expect -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 1px 8px rgba(26,22,18,0.04);">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
+            <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);">What to Expect</p>
+          </div>
+          <ul class="what-list" style="padding:4px 20px 8px;">
+            <li><span class="dash">—</span><span>Your e-ticket will be emailed immediately upon payment confirmation.</span></li>
+            <li><span class="dash">—</span><span>Doors open 30 minutes before the event start time.</span></li>
+            <li><span class="dash">—</span><span>Tickets are non-refundable but transferable up to 48 hours before the event.</span></li>
+            <li><span class="dash">—</span><span>A valid photo ID is required on entry for all guests.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RIGHT: Ticket panel -->
+      <div>
+        <div class="checkout-panel">
+          <!-- Panel header -->
+          <div style="padding:18px 22px;border-bottom:1px solid var(--border-light);background:var(--surface-2);">
+            <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);margin-bottom:3px;">Purchase Tickets</p>
+            <p id="tickets-remaining" style="font-size:12px;color:var(--text-muted);font-weight:300;"></p>
+          </div>
+
+          <!-- Selector -->
+          <div id="ticket-selector" style="padding:22px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+              <div>
+                <p style="font-size:13px;color:var(--text);font-weight:400;margin-bottom:4px;">General Admission</p>
+                <p id="price-per-ticket" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--accent);line-height:1;"></p>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <div id="qty-display" style="width:40px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--text);">1</div>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+              </div>
+            </div>
+
+            <!-- Price breakdown -->
+            <div style="padding:14px 0;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:8px;font-weight:300;">
+                <span>Per ticket</span><span id="unit-price"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:8px;font-weight:300;">
+                <span>Quantity</span><span id="qty-summary">× 1</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);font-weight:300;">
+                <span>Booking fee</span><span>Included</span>
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;">
+              <span style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);">Total</span>
+              <span id="total-price" style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--text);"></span>
+            </div>
+
+            <button id="checkout-btn" class="btn-primary" onclick="startCheckout()">
+              <svg width="15" height="12" viewBox="0 0 15 12" fill="none"><rect x="1" y="2" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h13" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="8.5" r="0.9" fill="currentColor"/></svg>
+              Proceed to Checkout
+            </button>
+
+            <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-top:12px;">
+              <div class="trust-badge">
+                <svg width="11" height="13" viewBox="0 0 11 13" fill="none"><path d="M5.5 1L1 3v3.5C1 9.5 3 11.5 5.5 12 8 11.5 10 9.5 10 6.5V3L5.5 1z" stroke="currentColor" stroke-width="1"/></svg>
+                Secure
+              </div>
+              <div style="width:1px;height:12px;background:var(--border);"></div>
+              <div class="trust-badge">
+                <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 8V2a1 1 0 011-1h8a1 1 0 011 1v6a1 1 0 01-1 1H2a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1"/><path d="M1 4h10" stroke="currentColor" stroke-width="1"/></svg>
+                Stripe
+              </div>
+              <div style="width:1px;height:12px;background:var(--border);"></div>
+              <div class="trust-badge">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.4 3.1L11 4.6l-2.5 2.4.6 3.3L6 8.7l-3.1 1.6.6-3.3L1 4.6l3.6-.5L6 1z" stroke="currentColor" stroke-width="0.9"/></svg>
+                Test mode
+              </div>
+            </div>
+          </div>
+
+          <!-- Stripe embedded checkout -->
+          <div id="stripe-checkout-container" style="display:none;padding:12px 12px 16px;"></div>
+
+          <!-- Loading -->
+          <div id="checkout-loading" style="display:none;padding:40px;text-align:center;">
+            <div style="display:inline-block;width:22px;height:22px;border:2px solid rgba(200,169,110,0.25);border-top-color:var(--accent-bg);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:12px;"></div>
+            <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);">Preparing checkout…</p>
+          </div>
+          <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @media (max-width: 1024px) {
+      .event-layout { grid-template-columns: 1fr !important; }
+    }
+  </style>
+
+  <!-- ── FOOTER ── -->
+  <footer style="background:var(--surface-2);border-top:1px solid var(--border);">
+    <div style="max-width:1200px;margin:0 auto;padding:28px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:0.28em;color:var(--accent);">KOVA</span>
+      <p style="font-size:11px;color:var(--text-muted);letter-spacing:0.1em;">© 2026 KOVA Events Ltd</p>
+    </div>
+  </footer>
+
+  <!-- ── SCRIPTS ── -->
+  <script src="/js/config.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search)
+    const eventId = params.get('id')
+    let eventData = null
+    let quantity = 1
+
+    const BANNER_GRADIENTS = [
+      'linear-gradient(140deg,#EDE6F5 0%,#E4D8F0 45%,#EBE5F8 100%)',
+      'linear-gradient(140deg,#F5E6E8 0%,#EEDAD8 45%,#F0E4EE 100%)',
+      'linear-gradient(140deg,#E6F2E8 0%,#D9ECDB 45%,#E5EFEB 100%)',
+    ]
+
+    function fmt(d) { return new Date(d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) }
+    function fmtTime(d) { return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) }
+
+    function updatePricing() {
+      if (!eventData) return
+      const p = parseFloat(eventData.ticket_price)
+      document.getElementById('qty-display').textContent = quantity
+      document.getElementById('qty-summary').textContent = `× ${quantity}`
+      document.getElementById('total-price').textContent = '£' + (p*quantity).toFixed(2)
+      document.getElementById('unit-price').textContent = '£' + p.toFixed(2)
+    }
+
+    function changeQty(d) {
+      const max = Math.min(10,(eventData?.tickets_available||10)-(eventData?.tickets_sold||0))
+      const n = quantity+d
+      if (n<1||n>max) return
+      quantity=n; updatePricing()
+    }
+
+    async function loadEvent() {
+      if (!eventId) { window.location.href='/'; return }
+      const res = await fetch(`/.netlify/functions/get-event?id=${eventId}`)
+      eventData = await res.json()
+      if (!eventData||eventData.error) { window.location.href='/'; return }
+
+      document.title = `KOVA — ${eventData.title}`
+      document.getElementById('event-banner').style.background = BANNER_GRADIENTS[0]
+
+      const avail = eventData.tickets_available - (eventData.tickets_sold||0)
+      document.getElementById('hero-content').innerHTML = `
+        <p style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(154,123,48,0.8);margin-bottom:12px;font-family:'Inter',sans-serif;">KOVA Events · London</p>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7vw,82px);font-weight:300;letter-spacing:0.06em;color:var(--text);line-height:0.95;margin-bottom:18px;">${eventData.title}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+          <span style="font-size:14px;color:var(--text-2);font-weight:300;">${fmt(eventData.date)}</span>
+          <span style="color:var(--border);font-size:12px;">·</span>
+          <span style="font-size:14px;color:var(--text-2);font-weight:300;">${eventData.venue}</span>
+          <span style="color:var(--border);font-size:12px;">·</span>
+          <span style="font-size:13px;${avail<=0?'color:#B83030':avail<=20?'color:#9A7B30':'color:var(--text-2)'};">${avail>0?avail+' tickets remaining':'Sold out'}</span>
+        </div>
+      `
+
+      document.getElementById('event-description').innerHTML = (eventData.description||'An unforgettable KOVA experience.').split('\n').map(p=>`<p style="margin-bottom:14px;">${p}</p>`).join('')
+
+      document.getElementById('info-rows').innerHTML = `
+        <div class="info-row">
+          <div class="info-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.1"/><path d="M1 5h12M5 1v3M9 1v3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <div><div class="info-label">Date</div><div class="info-value">${fmt(eventData.date)}</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.1"/><path d="M7 4v3l2 1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <div><div class="info-label">Doors Open</div><div class="info-value">${fmtTime(eventData.date)}</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.79 1 3 2.79 3 5c0 3 4 8 4 8s4-5 4-8c0-2.21-1.79-4-4-4z" stroke="currentColor" stroke-width="1.1"/><circle cx="7" cy="5" r="1.2" stroke="currentColor" stroke-width="1"/></svg></div>
+          <div><div class="info-label">Venue</div><div class="info-value">${eventData.venue}</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 9V5l3 2 3-4 3 4 3-2v4H1z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="info-label">Availability</div><div class="info-value">${avail>0?avail+' of '+eventData.tickets_available+' remaining':'Sold out'}</div></div>
+        </div>
+      `
+
+      document.getElementById('price-per-ticket').textContent = '£'+parseFloat(eventData.ticket_price).toFixed(2)
+      document.getElementById('tickets-remaining').textContent = avail>0?`${avail} tickets still available`:'Sold out'
+      if (avail<=0) { document.getElementById('checkout-btn').disabled=true; document.getElementById('checkout-btn').textContent='Sold Out' }
+      updatePricing()
+    }
+
+    async function startCheckout() {
+      const btn = document.getElementById('checkout-btn')
+      const sel = document.getElementById('ticket-selector')
+      const load = document.getElementById('checkout-loading')
+      const cont = document.getElementById('stripe-checkout-container')
+
+      btn.disabled=true; sel.style.display='none'; load.style.display='block'
+      try {
+        const res = await fetch('/.netlify/functions/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({eventId,quantity})})
+        const {clientSecret,error} = await res.json()
+        if (error) throw new Error(error)
+        load.style.display='none'; cont.style.display='block'
+        const stripe = Stripe(window.KOVA_CONFIG.STRIPE_PUBLISHABLE_KEY)
+        const checkout = await stripe.initEmbeddedCheckout({clientSecret})
+        checkout.mount('#stripe-checkout-container')
+      } catch(err) {
+        load.style.display='none'; sel.style.display='block'; btn.disabled=false
+        alert('Unable to load checkout. Please try again.')
+      }
+    }
+
+    loadEvent()
+  </script>
+</body>
+</html>

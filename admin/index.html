@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KOVA Admin — Dashboard</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+    :root {
+      --bg:          #F7F2EA;
+      --surface:     #FFFFFF;
+      --surface-2:   #F2EDE5;
+      --sidebar-bg:  #FDFAF6;
+      --border:      #E6DFD5;
+      --border-light:#EDE8E1;
+      --accent:      #9A7B30;
+      --accent-bg:   #C8A96E;
+      --accent-soft: rgba(200,169,110,0.1);
+      --text:        #1A1612;
+      --text-2:      #6B6156;
+      --text-muted:  #A8A098;
+      --success:     #16853A;
+      --success-soft:rgba(22,133,58,0.1);
+      --warn-soft:   rgba(202,138,4,0.1);
+      --warn:        #9A6D0C;
+      --error:       #B83030;
+      --error-soft:  rgba(184,48,48,0.08);
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 230px;
+      height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+      overflow-y: auto;
+    }
+    .sidebar-brand {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all 0.14s;
+      text-decoration: none;
+      margin-bottom: 2px;
+    }
+    .nav-item:hover { background: var(--border-light); color: var(--text); }
+    .nav-item.active { background: var(--accent-soft); color: var(--accent); }
+
+    /* ── Main ── */
+    .main-content {
+      margin-left: 230px;
+      min-height: 100vh;
+      padding: 32px 32px;
+    }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+      box-shadow: 0 1px 6px rgba(26,22,18,0.04);
+    }
+    .stat-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; line-height: 1; }
+
+    /* ── Table ── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 8px rgba(26,22,18,0.04);
+    }
+    .table-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--surface-2);
+      font-weight: 500;
+    }
+    td {
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(247,242,234,0.5); }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .badge-pub  { background: var(--success-soft); color: var(--success); border: 1px solid rgba(22,133,58,0.2); }
+    .badge-draft{ background: var(--warn-soft);    color: var(--warn);    border: 1px solid rgba(202,138,4,0.2); }
+    .badge-conf { background: var(--success-soft); color: var(--success); border: 1px solid rgba(22,133,58,0.2); }
+    .badge-pend { background: var(--warn-soft);    color: var(--warn);    border: 1px solid rgba(202,138,4,0.2); }
+
+    /* ── Toggle ── */
+    .toggle { position: relative; display: inline-block; width: 36px; height: 20px; cursor: pointer; }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--border); border-radius: 20px; transition: 0.2s;
+    }
+    .toggle-thumb {
+      position: absolute;
+      width: 14px; height: 14px;
+      bottom: 3px; left: 3px;
+      background: white; border-radius: 50%;
+      transition: 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle input:checked ~ .toggle-track { background: rgba(22,133,58,0.35); }
+    .toggle input:checked ~ .toggle-thumb { transform: translateX(16px); background: var(--success); }
+
+    /* ── Action buttons ── */
+    .action-btn {
+      padding: 5px 11px;
+      font-size: 11px;
+      font-weight: 500;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.14s;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-2);
+    }
+    .action-btn:hover { border-color: var(--accent-bg); color: var(--accent); background: var(--accent-soft); }
+    .action-btn.danger:hover { border-color: var(--error); color: var(--error); background: var(--error-soft); }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px;
+      background: var(--text); color: var(--surface);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+      border: none; border-radius: 6px; cursor: pointer; transition: background 0.18s;
+    }
+    .btn-primary:hover { background: var(--accent); }
+
+    .btn-secondary {
+      padding: 10px 20px;
+      background: transparent; color: var(--text-2);
+      font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+      border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--accent-bg); color: var(--accent); }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,22,18,0.3);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%; max-width: 540px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(26,22,18,0.15);
+      transform: translateY(12px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    /* ── Form inputs ── */
+    .form-input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 300;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .form-input:focus { border-color: var(--accent-bg); box-shadow: 0 0 0 3px rgba(200,169,110,0.1); background: var(--surface); }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-label { display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px; color: var(--text);
+      box-shadow: 0 4px 20px rgba(26,22,18,0.1);
+      z-index: 200;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s;
+    }
+    .toast.show  { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(22,133,58,0.3); }
+    .toast.error   { border-color: rgba(184,48,48,0.3); color: var(--error); }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; padding: 80px 16px 24px; }
+      .mobile-bar { display: flex !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:0.3em;color:var(--accent);font-weight:300;margin-bottom:2px;">KOVA</div>
+      <div style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--text-muted);">Admin Dashboard</div>
+    </div>
+
+    <nav style="padding:16px 12px;flex:1;">
+      <p style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);padding:0 4px;margin-bottom:8px;">Management</p>
+      <a id="nav-events"  class="nav-item active" onclick="showSection('events')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="2" width="13" height="12" rx="1.5" stroke="currentColor" stroke-width="1.1"/><path d="M1 6h13M5 1v3M10 1v3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+        Events
+      </a>
+      <a id="nav-tickets" class="nav-item" onclick="showSection('tickets')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M1 5.5A1.5 1.5 0 012.5 4h10A1.5 1.5 0 0114 5.5v1a1.5 1.5 0 010 3v1A1.5 1.5 0 0112.5 12h-10A1.5 1.5 0 011 10.5v-1a1.5 1.5 0 010-3v-1z" stroke="currentColor" stroke-width="1.1"/></svg>
+        Tickets Sold
+      </a>
+      <a class="nav-item" href="/" target="_blank" style="margin-top:8px;">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1a6.5 6.5 0 100 13A6.5 6.5 0 007.5 1z" stroke="currentColor" stroke-width="1.1"/><path d="M1 7.5h13M7.5 1C6 4 5.5 5.8 5.5 7.5S6 11 7.5 14M7.5 1C9 4 9.5 5.8 9.5 7.5S9 11 7.5 14" stroke="currentColor" stroke-width="1.1"/></svg>
+        View Website
+      </a>
+    </nav>
+
+    <!-- User -->
+    <div style="padding:14px 12px;border-top:1px solid var(--border-light);">
+      <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--surface-2);border:1px solid var(--border-light);border-radius:8px;margin-bottom:8px;">
+        <div style="width:26px;height:26px;background:var(--accent-soft);border:1px solid rgba(200,169,110,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4" r="2.2" stroke="var(--accent)" stroke-width="1"/><path d="M1.5 10.5c0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5 4.5" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/></svg>
+        </div>
+        <p id="user-email" style="font-size:11px;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:155px;">Loading…</p>
+      </div>
+      <button onclick="signOut()" style="width:100%;padding:7px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);font-size:11px;letter-spacing:0.1em;cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;" onmouseover="this.style.borderColor='var(--error)';this.style.color='var(--error)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile top bar -->
+  <div class="mobile-bar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(253,250,246,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-light);padding:14px 20px;align-items:center;justify-content:space-between;">
+    <span style="font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:0.3em;color:var(--accent);">KOVA</span>
+    <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="background:none;border:none;color:var(--text-2);cursor:pointer;">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <!-- Top -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <p style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">Overview</p>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--text);">Event Management</h1>
+      </div>
+      <button onclick="openCreateModal()" class="btn-primary">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        New Event
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px;">
+      <div class="stat-card">
+        <div class="stat-label">Total Events</div>
+        <div class="stat-value" id="stat-events" style="color:var(--text);">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Published</div>
+        <div class="stat-value" id="stat-published" style="color:var(--accent);">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tickets Sold</div>
+        <div class="stat-value" id="stat-tickets" style="color:var(--text);">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value" id="stat-revenue" style="color:var(--success);">—</div>
+      </div>
+    </div>
+
+    <!-- Events section -->
+    <div id="section-events">
+      <div class="table-card">
+        <div class="table-header">
+          <p style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);">All Events</p>
+          <button onclick="openCreateModal()" class="action-btn" style="color:var(--accent);border-color:rgba(200,169,110,0.4);">+ New Event</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Price</th>
+                <th>Sold / Cap</th>
+                <th>Status</th>
+                <th>Publish</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="events-tbody">
+              <tr><td colspan="8" style="text-align:center;padding:48px;color:var(--text-muted);">Loading events…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets section -->
+    <div id="section-tickets" style="display:none;">
+      <div class="table-card">
+        <div class="table-header">
+          <p style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);">Ticket Sales</p>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Event</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="tickets-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:48px;color:var(--text-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── CREATE / EDIT MODAL ── -->
+  <div class="modal-overlay" id="event-modal">
+    <div class="modal">
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border-light);background:var(--surface-2);display:flex;align-items:center;justify-content:space-between;border-radius:12px 12px 0 0;">
+        <h2 id="modal-title" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--text);">Create Event</h2>
+        <button onclick="closeModal()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;border-radius:4px;transition:color 0.15s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <form id="event-form" style="padding:22px 24px 24px;" onsubmit="submitEvent(event)">
+        <input type="hidden" id="edit-id" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="grid-column:span 2;">
+            <label class="form-label">Event Title *</label>
+            <input id="field-title" class="form-input" type="text" placeholder="e.g. ECLIPSE" required />
+          </div>
+          <div>
+            <label class="form-label">Date & Time *</label>
+            <input id="field-date" class="form-input" type="datetime-local" required />
+          </div>
+          <div>
+            <label class="form-label">Venue *</label>
+            <input id="field-venue" class="form-input" type="text" placeholder="The Vaults, London" required />
+          </div>
+          <div>
+            <label class="form-label">Ticket Price (£) *</label>
+            <input id="field-price" class="form-input" type="number" step="0.01" min="1" placeholder="45.00" required />
+          </div>
+          <div>
+            <label class="form-label">Capacity *</label>
+            <input id="field-capacity" class="form-input" type="number" min="1" placeholder="300" required />
+          </div>
+          <div style="grid-column:span 2;">
+            <label class="form-label">Description</label>
+            <textarea id="field-description" class="form-input" rows="4" placeholder="Describe the experience…" style="resize:vertical;"></textarea>
+          </div>
+          <div style="grid-column:span 2;display:flex;align-items:center;gap:12px;">
+            <label class="toggle">
+              <input type="checkbox" id="field-published" />
+              <div class="toggle-track"></div>
+              <div class="toggle-thumb"></div>
+            </label>
+            <span style="font-size:13px;color:var(--text-2);font-weight:300;">Publish immediately</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--border-light);">
+          <button type="button" onclick="closeModal()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary" id="modal-submit">Create Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── DELETE CONFIRM ── -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal" style="max-width:400px;">
+      <div style="padding:24px;">
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--text);margin-bottom:8px;">Delete Event</h2>
+        <p style="font-size:13px;color:var(--text-2);font-weight:300;margin-bottom:22px;line-height:1.6;">This action cannot be undone. Any tickets already sold will remain on record.</p>
+        <div style="display:flex;gap:10px;">
+          <button onclick="document.getElementById('delete-modal').classList.remove('open')" class="btn-secondary" style="flex:1;">Cancel</button>
+          <button id="confirm-delete" style="flex:1;padding:10px 20px;background:var(--error);color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ── SCRIPTS ── -->
+  <script src="/js/config.js"></script>
+  <script>
+    const { createClient } = supabase
+    const sb = createClient(window.KOVA_CONFIG.SUPABASE_URL, window.KOVA_CONFIG.SUPABASE_ANON_KEY)
+
+    let session = null
+    let allEvents = []
+    let editingId = null
+
+    async function init() {
+      const { data: { session: s } } = await sb.auth.getSession()
+      if (!s) { window.location.href = '/admin/login.html'; return }
+      session = s
+      document.getElementById('user-email').textContent = s.user.email
+      await loadDashboard()
+    }
+
+    const authH = () => ({ 'Authorization': `Bearer ${session.access_token}` })
+
+    function showSection(name) {
+      document.getElementById('section-events').style.display  = name==='events'  ? 'block' : 'none'
+      document.getElementById('section-tickets').style.display = name==='tickets' ? 'block' : 'none'
+      document.getElementById('nav-events').className  = 'nav-item' + (name==='events'  ? ' active':'')
+      document.getElementById('nav-tickets').className = 'nav-item' + (name==='tickets' ? ' active':'')
+      if (name==='tickets') loadTickets()
+    }
+
+    async function loadDashboard() {
+      try {
+        const r = await fetch('/.netlify/functions/admin-get-events', { headers: authH() })
+        allEvents = await r.json()
+        renderTable(allEvents)
+        const pub = allEvents.filter(e=>e.published).length
+        const sold = allEvents.reduce((s,e)=>s+(e.tickets_sold||0),0)
+        const rev  = allEvents.reduce((s,e)=>s+((e.tickets_sold||0)*parseFloat(e.ticket_price)),0)
+        document.getElementById('stat-events').textContent    = allEvents.length
+        document.getElementById('stat-published').textContent = pub
+        document.getElementById('stat-tickets').textContent   = sold
+        document.getElementById('stat-revenue').textContent   = '£'+rev.toFixed(0)
+      } catch { showToast('Failed to load events','error') }
+    }
+
+    function fmtDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) }
+
+    function renderTable(events) {
+      const tbody = document.getElementById('events-tbody')
+      if (!events.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:48px;color:var(--text-muted);">No events yet. Create your first event above.</td></tr>`
+        return
+      }
+      tbody.innerHTML = events.map(e => {
+        const sold = e.tickets_sold||0
+        const pct  = Math.round((sold/e.tickets_available)*100)
+        const barColor = pct>=90 ? 'var(--error)' : pct>=60 ? 'var(--warn)' : 'var(--success)'
+        return `
+          <tr>
+            <td>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--text);">${e.title}</div>
+            </td>
+            <td style="color:var(--text-2);font-size:12px;">${fmtDate(e.date)}</td>
+            <td style="color:var(--text-2);font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.venue}</td>
+            <td style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--accent);">£${parseFloat(e.ticket_price).toFixed(0)}</td>
+            <td>
+              <div style="font-size:12px;color:${barColor};margin-bottom:5px;font-weight:500;">${sold} / ${e.tickets_available}</div>
+              <div style="height:4px;background:var(--border-light);border-radius:2px;width:90px;">
+                <div style="height:100%;background:${barColor};border-radius:2px;width:${pct}%;transition:width 0.5s;"></div>
+              </div>
+            </td>
+            <td><span class="badge ${e.published?'badge-pub':'badge-draft'}"><span class="badge-dot"></span>${e.published?'Published':'Draft'}</span></td>
+            <td>
+              <label class="toggle" onclick="event.stopPropagation()">
+                <input type="checkbox" ${e.published?'checked':''} onchange="togglePublish('${e.id}',this.checked)" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </td>
+            <td>
+              <div style="display:flex;gap:6px;">
+                <button class="action-btn" onclick="openEditModal('${e.id}')">Edit</button>
+                <button class="action-btn danger" onclick="confirmDelete('${e.id}')">Delete</button>
+              </div>
+            </td>
+          </tr>`
+      }).join('')
+    }
+
+    async function loadTickets() {
+      try {
+        const r = await fetch('/.netlify/functions/admin-get-tickets',{headers:authH()})
+        const tickets = await r.json()
+        const tbody = document.getElementById('tickets-tbody')
+        if (!tickets.length) { tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--text-muted);">No tickets sold yet.</td></tr>`; return }
+        tbody.innerHTML = tickets.map(t=>`
+          <tr>
+            <td>
+              <div style="font-size:13px;font-weight:400;">${t.customer_name||'—'}</div>
+              <div style="font-size:11px;color:var(--text-muted);">${t.customer_email}</div>
+            </td>
+            <td style="font-family:'Cormorant Garamond',serif;font-size:17px;">${t.events?.title||'—'}</td>
+            <td style="text-align:center;">${t.quantity}</td>
+            <td style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--accent);">£${parseFloat(t.total_amount).toFixed(2)}</td>
+            <td><span class="badge ${t.status==='confirmed'?'badge-conf':'badge-pend'}"><span class="badge-dot"></span>${t.status}</span></td>
+            <td style="font-size:11px;color:var(--text-muted);">${fmtDate(t.created_at)}</td>
+          </tr>`).join('')
+      } catch { showToast('Failed to load tickets','error') }
+    }
+
+    async function togglePublish(id,pub) {
+      try {
+        await fetch('/.netlify/functions/admin-toggle-publish',{method:'PATCH',headers:{...authH(),'Content-Type':'application/json'},body:JSON.stringify({id,published:pub})})
+        showToast(pub?'Event published':'Set to draft','success')
+        await loadDashboard()
+      } catch { showToast('Failed to update','error') }
+    }
+
+    function openCreateModal() {
+      editingId=null
+      document.getElementById('modal-title').textContent='Create Event'
+      document.getElementById('modal-submit').textContent='Create Event'
+      document.getElementById('event-form').reset()
+      document.getElementById('event-modal').classList.add('open')
+    }
+    function openEditModal(id) {
+      const e=allEvents.find(x=>x.id===id); if(!e)return
+      editingId=id
+      document.getElementById('modal-title').textContent='Edit Event'
+      document.getElementById('modal-submit').textContent='Save Changes'
+      document.getElementById('edit-id').value=id
+      document.getElementById('field-title').value=e.title
+      document.getElementById('field-date').value=new Date(e.date).toISOString().slice(0,16)
+      document.getElementById('field-venue').value=e.venue
+      document.getElementById('field-price').value=e.ticket_price
+      document.getElementById('field-capacity').value=e.tickets_available
+      document.getElementById('field-description').value=e.description||''
+      document.getElementById('field-published').checked=e.published
+      document.getElementById('event-modal').classList.add('open')
+    }
+    function closeModal() { document.getElementById('event-modal').classList.remove('open') }
+
+    async function submitEvent(ev) {
+      ev.preventDefault()
+      const btn=document.getElementById('modal-submit'); btn.disabled=true
+      const payload={
+        title:document.getElementById('field-title').value,
+        date:document.getElementById('field-date').value,
+        venue:document.getElementById('field-venue').value,
+        ticket_price:parseFloat(document.getElementById('field-price').value),
+        tickets_available:parseInt(document.getElementById('field-capacity').value),
+        description:document.getElementById('field-description').value,
+        published:document.getElementById('field-published').checked
+      }
+      try {
+        if (editingId) {
+          await fetch('/.netlify/functions/admin-update-event',{method:'PUT',headers:{...authH(),'Content-Type':'application/json'},body:JSON.stringify({id:editingId,...payload})})
+          showToast('Event updated','success')
+        } else {
+          await fetch('/.netlify/functions/admin-create-event',{method:'POST',headers:{...authH(),'Content-Type':'application/json'},body:JSON.stringify(payload)})
+          showToast('Event created','success')
+        }
+        closeModal(); await loadDashboard()
+      } catch { showToast('Failed to save','error') } finally { btn.disabled=false }
+    }
+
+    function confirmDelete(id) {
+      document.getElementById('delete-modal').classList.add('open')
+      document.getElementById('confirm-delete').onclick=()=>deleteEvent(id)
+    }
+    async function deleteEvent(id) {
+      document.getElementById('delete-modal').classList.remove('open')
+      try {
+        await fetch('/.netlify/functions/admin-delete-event',{method:'DELETE',headers:{...authH(),'Content-Type':'application/json'},body:JSON.stringify({id})})
+        showToast('Event deleted','success'); await loadDashboard()
+      } catch { showToast('Failed to delete','error') }
+    }
+
+    async function signOut() { await sb.auth.signOut(); window.location.href='/admin/login.html' }
+
+    function showToast(msg,type='success') {
+      const t=document.getElementById('toast')
+      t.textContent=msg; t.className=`toast ${type} show`
+      setTimeout(()=>t.classList.remove('show'),3000)
+    }
+
+    document.getElementById('event-modal').addEventListener('click',e=>{if(e.target===document.getElementById('event-modal'))closeModal()})
+    document.getElementById('delete-modal').addEventListener('click',e=>{if(e.target===document.getElementById('delete-modal'))document.getElementById('delete-modal').classList.remove('open')})
+
+    init()
+  </script>
+</body>
+</html>

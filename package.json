@@ -1,0 +1,13 @@
+{
+  "name": "kova-events",
+  "version": "1.0.0",
+  "description": "KOVA Events — Premium Event Ticketing Platform",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "resend": "^4.0.0",
+    "stripe": "^16.0.0"
+  }
+}

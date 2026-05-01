@@ -67,6 +67,21 @@ Please give me a detailed shoot list with:
    - Portrait orientation
    - Story text overlay suggestions (what to write on the story)
 
+   CRITICAL RULES FOR STORY IMAGES — follow these without exception:
+   - Stories are 1080×1920 (9:16). Every story image must fill this frame completely.
+     There must be zero empty/dead space at the top, bottom, or sides.
+   - If the screenshot does not naturally fill the frame, instruct me to zoom the browser
+     in (e.g. 150% zoom) until the content fills the full height.
+   - All overlay text must be large (minimum 60px equivalent). Never suggest small captions
+     — if text is needed, make it the dominant element, not a footnote.
+   - Text overlays must be centre-aligned unless there is a strong reason not to.
+   - If a page has a lot of white space when viewed on mobile, instruct me to zoom in
+     further or crop to a specific section rather than showing the full page.
+   - Always specify the exact browser zoom level (e.g. "set Chrome DevTools zoom to 150%")
+     so the content fills the screen edge to edge.
+   - If adding a gradient or colour overlay to the screenshot, it must cover the full
+     1080×1920 frame — no partial overlays that leave corners empty.
+
 3. SCREEN RECORD SEQUENCE
    - Step by step script for a 60-second video
    - What to narrate at each step
@@ -80,6 +95,13 @@ Be very specific. Tell me exactly what state each page should be in.
 The colourful purple aesthetic with real event photography screenshots very well on
 Instagram — factor that into your framing suggestions. Hero shots with the concert photo
 visible behind the headline text work especially well for stories.
+
+For every story you suggest, double-check it against these three questions before
+finalising it:
+  1. Does the content fill the full 1080×1920 frame with no empty corners or dead zones?
+  2. Is the overlay text large enough to read without zooming in on a phone screen?
+  3. Is the text centre-aligned (or intentionally offset for a design reason)?
+If the answer to any of these is no, revise the suggestion until it passes all three.
 ```
 
 ---

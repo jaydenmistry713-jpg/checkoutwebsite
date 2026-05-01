@@ -1,16 +1,10 @@
 /**
  * KOVA Events — Frontend Configuration
- *
- * These are PUBLIC keys only (safe to expose in browser).
+ * Public keys only (safe to expose in browser).
  * Secret keys belong in Netlify environment variables, never here.
- *
- * How to fill this in:
- *  SUPABASE_URL       → Supabase Dashboard → Project Settings → API → Project URL
- *  SUPABASE_ANON_KEY  → Supabase Dashboard → Project Settings → API → anon / public
- *  STRIPE_PK          → Stripe Dashboard → Developers → API Keys → Publishable key
  */
 window.KOVA_CONFIG = {
-  SUPABASE_URL: 'YOUR_SUPABASE_PROJECT_URL',
-  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY',
-  STRIPE_PUBLISHABLE_KEY: 'pk_test_YOUR_STRIPE_PUBLISHABLE_KEY'
+  SUPABASE_URL: 'https://fpghsjgqpseahbjlnrhr.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwZ2hzamdxcHNlYWhiamxucmhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1ODIyMzIsImV4cCI6MjA5MzE1ODIzMn0.E2n7ztQZC1PKzki47_knroB2q-9jVrg4R1ZB3VxAruY',
+  STRIPE_PUBLISHABLE_KEY: 'pk_test_51SdpV1GOudW4F2RiAZSQAmDYsSaEY38nMXtWOtEUVSsvBpQfjWN3HzpH1YV5ELNnqpMUJXadimHdgswklrg2212q00M5lwntR9'
 }
